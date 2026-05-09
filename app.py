@@ -242,7 +242,7 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
 PLOTLY_THEME = dict(
     paper_bgcolor='rgba(0,0,0,0)',
     plot_bgcolor='rgba(255,255,255,0.04)',
-    font=dict(color='#e2e8f0', family='Inter'),
+    font=dict(color='#ffffff', family='Inter'),
     margin=dict(t=50, b=40, l=40, r=20)
 )
 
@@ -260,7 +260,7 @@ with tab1:
         )
         fig.update_layout(**PLOTLY_THEME, title_font_size=16)
         fig.update_traces(marker_line_width=0)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True, theme=None)
 
     with c2:
         # Cost Distribution (log scale for readability)
@@ -272,7 +272,7 @@ with tab1:
         )
         fig2.update_layout(**PLOTLY_THEME, title_font_size=16)
         fig2.update_traces(marker_line_width=0)
-        st.plotly_chart(fig2, use_container_width=True)
+        st.plotly_chart(fig2, use_container_width=True, theme=None)
 
     # Cost vs Rating scatter (Plotly interactive)
     fig3 = px.scatter(
@@ -285,7 +285,7 @@ with tab1:
     )
     fig3.update_layout(**PLOTLY_THEME, title_font_size=16,
                        coloraxis_colorbar=dict(title='Votes', tickfont=dict(color='#a0aec0')))
-    st.plotly_chart(fig3, use_container_width=True)
+    st.plotly_chart(fig3, use_container_width=True, theme=None)
 
     # Correlation Heatmap
     corr = fdf[['rate','votes','cost']].corr()
@@ -296,7 +296,7 @@ with tab1:
         textfont=dict(size=16, color='white')
     ))
     fig4.update_layout(**PLOTLY_THEME, title='🔗 Correlation Heatmap (Rate · Votes · Cost)', title_font_size=16)
-    st.plotly_chart(fig4, use_container_width=True)
+    st.plotly_chart(fig4, use_container_width=True, theme=None)
 
 # ── TAB 2: LOCATION ANALYSIS ──────────────────────────────────────────────
 with tab2:
@@ -314,7 +314,7 @@ with tab2:
         fig.update_layout(**PLOTLY_THEME, title_font_size=15,
                           yaxis=dict(autorange='reversed'),
                           coloraxis_showscale=False)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True, theme=None)
 
     with c2:
         loc_rating = fdf.groupby('location')['rate'].mean().sort_values(ascending=False).head(20).reset_index()
@@ -327,7 +327,7 @@ with tab2:
         fig2.update_layout(**PLOTLY_THEME, title_font_size=15,
                            yaxis=dict(autorange='reversed'),
                            coloraxis_showscale=False)
-        st.plotly_chart(fig2, use_container_width=True)
+        st.plotly_chart(fig2, use_container_width=True, theme=None)
 
     # Online order vs book table
     c3, c4 = st.columns(2)
@@ -340,7 +340,7 @@ with tab2:
                       hole=0.45)
         fig3.update_layout(**PLOTLY_THEME, title_font_size=15)
         fig3.update_traces(textfont_color='white')
-        st.plotly_chart(fig3, use_container_width=True)
+        st.plotly_chart(fig3, use_container_width=True, theme=None)
 
     with c4:
         bt = fdf['book_table'].value_counts().reset_index()
@@ -351,7 +351,7 @@ with tab2:
                       hole=0.45)
         fig4.update_layout(**PLOTLY_THEME, title_font_size=15)
         fig4.update_traces(textfont_color='white')
-        st.plotly_chart(fig4, use_container_width=True)
+        st.plotly_chart(fig4, use_container_width=True, theme=None)
 
     # Avg rating by restaurant type
     type_rating = fdf.groupby('rest_type').agg(
@@ -367,7 +367,7 @@ with tab2:
     fig5.update_layout(**PLOTLY_THEME, title_font_size=15,
                        xaxis=dict(tickangle=-35), coloraxis_showscale=False)
     fig5.update_traces(textposition='outside', textfont_color='#e2e8f0')
-    st.plotly_chart(fig5, use_container_width=True)
+    st.plotly_chart(fig5, use_container_width=True, theme=None)
 
 # ── TAB 3: CUISINE INSIGHTS ───────────────────────────────────────────────
 with tab3:
@@ -399,7 +399,7 @@ with tab3:
     fig.update_layout(**PLOTLY_THEME, title_font_size=16,
                       xaxis=dict(tickangle=-40), coloraxis_showscale=False)
     fig.update_traces(textposition='outside', textfont_color='#e2e8f0')
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True, theme=None)
 
     # Avg rating per cuisine
     cuisine_ratings = fdf.copy()
@@ -417,7 +417,7 @@ with tab3:
     fig2.update_layout(**PLOTLY_THEME, title_font_size=16,
                        xaxis=dict(tickangle=-40), coloraxis_showscale=False)
     fig2.update_traces(textposition='outside', textfont_color='#e2e8f0')
-    st.plotly_chart(fig2, use_container_width=True)
+    st.plotly_chart(fig2, use_container_width=True, theme=None)
 
 # ── TAB 4: ML MODEL ──────────────────────────────────────────────────────
 with tab4:
@@ -446,7 +446,7 @@ with tab4:
             labels={'Importance':'Importance Score','Feature':'Feature'}
         )
         fig.update_layout(**PLOTLY_THEME, title_font_size=15, coloraxis_showscale=False)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True, theme=None)
 
     with c2:
         # Actual vs Predicted
@@ -466,7 +466,7 @@ with tab4:
                        x1=y_sample.max(), y1=y_sample.max(),
                        line=dict(color='#48bb78', dash='dash', width=2))
         fig2.update_layout(**PLOTLY_THEME, title_font_size=15)
-        st.plotly_chart(fig2, use_container_width=True)
+        st.plotly_chart(fig2, use_container_width=True, theme=None)
 
     # Residual Distribution
     residuals = y_test.values - preds
@@ -478,7 +478,7 @@ with tab4:
     )
     fig3.add_vline(x=0, line_dash='dash', line_color='#e94560', line_width=2)
     fig3.update_layout(**PLOTLY_THEME, title_font_size=15)
-    st.plotly_chart(fig3, use_container_width=True)
+    st.plotly_chart(fig3, use_container_width=True, theme=None)
 
     # Rating Predictor Widget
     st.markdown("---")
