@@ -5,3 +5,5 @@ seaborn
 wordcloud
 scikit-learn
 jupyter
+streamlit
+plotly
