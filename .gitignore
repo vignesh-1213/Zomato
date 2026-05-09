@@ -1,5 +1,6 @@
 venv/
 __pycache__/
-*.csv
+# *.csv
+!zomato.csv
 .ipynb_checkpoints/
 *.pyc
