@@ -54,18 +54,21 @@ if 'df' in locals():
     # Rename columns for convenience
     df.rename(columns={'approx_cost(for two people)':'cost', 'listed_in(type)':'type', 'listed_in(city)':'city'}, inplace=True)
     
-    # Clean the rating column: '4.1/5' -> 4.1
-    def clean_rate(value):
-        if pd.isnull(value):
+    # Clean the rating column: '4.1/5' -> 4.1 (handles embedded strings too)
+    def clean_rate(val):
+        import re
+        val = str(val).strip()
+        if val in ['-', 'NEW', 'nan', 'None', '']:
             return np.nan
-        value = str(value)
-        if value == '- ' or value == 'NEW' or value == '-':
-            return np.nan
-        value = value.split('/')[0].strip()
-        try:
-            return float(value)
-        except:
-            return np.nan
+        match = re.search(r'(\d+\.?\d*)\s*/\s*5', val)
+        if match:
+            try:
+                rating = float(match.group(1))
+                if 0.0 <= rating <= 5.0:
+                    return rating
+            except:
+                pass
+        return np.nan
 
     df['rate'] = df['rate'].apply(clean_rate)
     
@@ -81,6 +84,9 @@ if 'df' in locals():
             return np.nan
 
     df['cost'] = df['cost'].apply(clean_cost)
+    
+    # Clean votes column
+    df['votes'] = pd.to_numeric(df['votes'], errors='coerce')
     
     # Drop NAs
     df.dropna(inplace=True)
@@ -102,7 +108,7 @@ if 'df' in locals():
 
     # 2. Price vs Rating
     plt.figure(figsize=(10, 6))
-    sns.scatterplot(x='cost', y='rate', data=df, alpha=0.5, color='orange')
+    sns.scatterplot(x='cost', y='rate', data=df, alpha=0.5, hue='votes', palette='plasma')
     plt.title('Cost for Two vs. Rating')
     plt.xlabel('Cost for Two (INR)')
     plt.ylabel('Rating')
